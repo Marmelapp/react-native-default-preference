@@ -19,7 +19,7 @@ import com.facebook.react.bridge.WritableMap;
 import java.util.Map;
 
 public class RNDefaultPreferenceModule extends ReactContextBaseJavaModule {
-  private String preferencesName = "react-native";
+  private String preferencesName = "ProductService";
 
   private final ReactApplicationContext reactContext;
 
@@ -54,7 +54,7 @@ public class RNDefaultPreferenceModule extends ReactContextBaseJavaModule {
   public void getMultiple(ReadableArray keys, Promise promise) {
     WritableArray result = Arguments.createArray();
     for(int i = 0; i < keys.size(); i++) {
-      result.pushString(getPreferences().getString(keys.getString(i), null));
+      result.pushString(getPreferences().getBoolean(keys.getString(i), false) ? "1" : "0");
     }
     promise.resolve(result);
   }
