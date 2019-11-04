@@ -52,9 +52,16 @@ public class RNDefaultPreferenceModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void getMultiple(ReadableArray keys, Promise promise) {
+    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getReactApplicationContext());
+    SharedPreferences productPreferences = getReactApplicationContext().getSharedPreferences("ProductService", Context.MODE_PRIVATE);
+    SharedPreferences devicePreferences = getReactApplicationContext().getSharedPreferences("DeviceService", Context.MODE_PRIVATE);
+
     WritableArray result = Arguments.createArray();
     for(int i = 0; i < keys.size(); i++) {
-      result.pushString(getPreferences().getBoolean(keys.getString(i), false) ? "1" : "0");
+      Boolean value = preferences.getBoolean(keys.getString(i), false) ||
+              productPreferences.getBoolean(keys.getString(i), false) ||
+              devicePreferences.getBoolean(keys.getString(i), false);
+      result.pushString(value ? "1" : "0");
     }
     promise.resolve(result);
   }
@@ -100,7 +107,6 @@ public class RNDefaultPreferenceModule extends ReactContextBaseJavaModule {
     editor.commit();
     promise.resolve(null);
   }
-
 
   private SharedPreferences getPreferences() {
     return PreferenceManager.getDefaultSharedPreferences(getReactApplicationContext());
