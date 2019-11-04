@@ -3,6 +3,7 @@ package com.kevinresol.react_native_default_preference;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -19,7 +20,6 @@ import com.facebook.react.bridge.WritableMap;
 import java.util.Map;
 
 public class RNDefaultPreferenceModule extends ReactContextBaseJavaModule {
-  private String preferencesName = "ProductService";
 
   private final ReactApplicationContext reactContext;
 
@@ -101,20 +101,11 @@ public class RNDefaultPreferenceModule extends ReactContextBaseJavaModule {
     promise.resolve(null);
   }
 
-  @ReactMethod
-  public void setName(String preferencesName, Promise promise) {
-    this.preferencesName = preferencesName;
-    promise.resolve(null);
-  }
-
-  @ReactMethod
-  public void getName(Promise promise) {
-    promise.resolve(preferencesName);
-  }
 
   private SharedPreferences getPreferences() {
-    return getReactApplicationContext().getSharedPreferences(preferencesName, Context.MODE_PRIVATE);
+    return PreferenceManager.getDefaultSharedPreferences(getReactApplicationContext());
   }
+  
   private SharedPreferences.Editor getEditor() {
     return getPreferences().edit();
   }
